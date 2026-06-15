@@ -1,0 +1,23 @@
+# Resume Skill Gap Analyzer — Python Dependencies
+# Install with: pip install -r requirements.txt
+# Then run: python -m spacy download en_core_web_sm
+
+# Core NLP
+spacy>=3.7.0,<4.0.0
+rapidfuzz>=3.6.0
+
+# Machine learning / similarity scoring
+scikit-learn>=1.4.0
+numpy>=1.26.0
+
+# Web framework
+flask>=3.0.0
+
+# Data handling
+pandas>=2.2.0
+
+# Testing
+pytest>=8.0.0
+
+# Utilities
+python-dotenv>=1.0.0
