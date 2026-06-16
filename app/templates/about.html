@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}About · Resume Skill Gap Analyzer{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="card">
+    <h2>About This Project</h2>
+    <p style="line-height:1.7; color:#444; margin-bottom:1rem;">
+      The <strong>Resume Skill Gap Analyzer</strong> is an undergraduate research project
+      developed for CS 4850 – Faculty Directed Research at Weber State University.
+      It helps Computer Science students identify missing skills between their resume
+      and a target job description using rule-based Natural Language Processing (NLP).
+    </p>
+    <p style="line-height:1.7; color:#444; margin-bottom:1rem;">
+      The tool uses <strong>spaCy</strong> for Named Entity Recognition,
+      a curated <strong>CS skill taxonomy</strong> (73 skills across 5 categories)
+      for dictionary-based matching, and <strong>scikit-learn</strong> TF-IDF
+      cosine similarity for an overall match score.
+    </p>
+    <table style="width:100%; border-collapse:collapse; font-size:0.875rem; margin-top:1rem;">
+      <tr style="background:#f5f5f5;">
+        <td style="padding:0.6rem 0.75rem; font-weight:600; width:160px;">Student</td>
+        <td style="padding:0.6rem 0.75rem;">Oluwatomisin Adetoye Odewabi (Tomisin)</td>
+      </tr>
+      <tr>
+        <td style="padding:0.6rem 0.75rem; font-weight:600;">Mentor</td>
+        <td style="padding:0.6rem 0.75rem;">Dr. Amani Shatnawi</td>
+      </tr>
+      <tr style="background:#f5f5f5;">
+        <td style="padding:0.6rem 0.75rem; font-weight:600;">University</td>
+        <td style="padding:0.6rem 0.75rem;">Weber State University</td>
+      </tr>
+      <tr>
+        <td style="padding:0.6rem 0.75rem; font-weight:600;">Course</td>
+        <td style="padding:0.6rem 0.75rem;">CS 4850 – Faculty Directed Research</td>
+      </tr>
+      <tr style="background:#f5f5f5;">
+        <td style="padding:0.6rem 0.75rem; font-weight:600;">Term</td>
+        <td style="padding:0.6rem 0.75rem;">Summer 2026</td>
+      </tr>
+      <tr>
+        <td style="padding:0.6rem 0.75rem; font-weight:600;">Repository</td>
+        <td style="padding:0.6rem 0.75rem;">
+          <a href="https://github.com/Odewabi/resume-skill-gap-analyzer"
+             style="color:#1a1a1a;">
+            github.com/Odewabi/resume-skill-gap-analyzer
+          </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card" style="font-size:0.875rem; color:#555; line-height:1.7;">
+    <h2>How It Works</h2>
+    <ol style="padding-left:1.25rem; margin-top:0.5rem;">
+      <li style="margin-bottom:0.5rem;"><strong>Text preprocessing</strong> — cleans HTML, normalizes case, and tokenizes both documents.</li>
+      <li style="margin-bottom:0.5rem;"><strong>Skill extraction</strong> — runs spaCy NER and dictionary matching against a curated CS skill taxonomy to identify skills in each document.</li>
+      <li style="margin-bottom:0.5rem;"><strong>Gap computation</strong> — computes the set difference (skills in JD but not resume), organized by category.</li>
+      <li style="margin-bottom:0.5rem;"><strong>Similarity scoring</strong> — uses TF-IDF vectorization and cosine similarity for an overall text match score.</li>
+      <li><strong>Feedback generation</strong> — produces category-specific improvement tips based on the identified gaps.</li>
+    </ol>
+  </div>
+</div>
+{% endblock %}

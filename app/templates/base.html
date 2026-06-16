@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Resume Skill Gap Analyzer{% endblock %}</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    /* ── Nav ──────────────────────────────────────────── */
+    nav {
+      background: #1a1a1a;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    nav .brand {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+    nav .brand span { color: #aaa; font-weight: 400; }
+    nav ul { list-style: none; display: flex; gap: 1.5rem; }
+    nav ul a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.15s;
+    }
+    nav ul a:hover { color: #fff; }
+
+    /* ── Page wrapper ────────────────────────────────── */
+    .page {
+      max-width: 860px;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ── Cards ───────────────────────────────────────── */
+    .card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.25rem;
+    }
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #111;
+    }
+
+    /* ── Buttons ─────────────────────────────────────── */
+    .btn {
+      display: inline-block;
+      padding: 0.65rem 1.4rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s, opacity 0.15s;
+      text-decoration: none;
+    }
+    .btn-primary { background: #1a1a1a; color: #fff; }
+    .btn-primary:hover { background: #333; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #ccc;
+      color: #333;
+    }
+    .btn-outline:hover { background: #f5f5f5; }
+
+    /* ── Error banner ─────────────────────────────────── */
+    .error-banner {
+      background: #fff3f3;
+      border: 1px solid #f5c2c2;
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1rem;
+      color: #b00;
+      font-size: 0.875rem;
+    }
+
+    /* ── Footer ──────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.8rem;
+      color: #999;
+    }
+
+    {% block extra_styles %}{% endblock %}
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="brand" href="/">Skill Gap Analyzer <span>· WSU CS 4850</span></a>
+    <ul>
+      <li><a href="/">Analyze</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <footer>
+    Resume Skill Gap Analyzer · Weber State University CS 4850 · Tomisin Odewabi · Summer 2026
+  </footer>
+</body>
+</html>

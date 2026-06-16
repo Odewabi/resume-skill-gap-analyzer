@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}Gap Report · Resume Skill Gap Analyzer{% endblock %}
+
+{% block extra_styles %}
+/* ── Score banner ──────────────────────────────────── */
+.score-banner {
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.score-circle {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.score-circle .num {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.score-circle .pct {
+  font-size: 0.7rem;
+  color: #aaa;
+  margin-top: 2px;
+}
+.score-info h2 { font-size: 1.15rem; margin-bottom: 0.3rem; }
+.score-info p  { color: #555; font-size: 0.9rem; line-height: 1.55; max-width: 480px; }
+.score-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+.score-meta .stat { text-align: center; }
+.score-meta .stat .val {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.score-meta .stat .lbl {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 1px;
+}
+
+/* ── Two-col layout ────────────────────────────────── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── Skill lists ───────────────────────────────────── */
+.skill-category { margin-bottom: 1rem; }
+.skill-category:last-child { margin-bottom: 0; }
+.cat-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  margin-bottom: 0.4rem;
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tag {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.tag-missing {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  color: #333;
+}
+.tag-matched {
+  background: #1a1a1a;
+  color: #fff;
+}
+.empty-state {
+  color: #aaa;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* ── Tips ──────────────────────────────────────────── */
+.tip {
+  padding: 0.75rem 1rem;
+  border-left: 3px solid #1a1a1a;
+  background: #fafafa;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  color: #333;
+}
+.tip:last-child { margin-bottom: 0; }
+.tip strong { color: #111; }
+
+/* ── Actions ───────────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+
+  <!-- Score Banner -->
+  <div class="score-banner">
+    <div class="score-circle">
+      <span class="num">{{ (report.similarity.score * 100) | int }}%</span>
+      <span class="pct">match</span>
+    </div>
+    <div class="score-info">
+      <h2>{{ report.similarity.label }}</h2>
+      <p>{{ report.similarity.description }}</p>
+      <div class="score-meta">
+        <div class="stat">
+          <div class="val">{{ report.coverage_pct }}%</div>
+          <div class="lbl">JD skills covered</div>
+        </div>
+        <div class="stat">
+          <div class="val">{{ report.matched_count }}</div>
+          <div class="lbl">skills matched</div>
+        </div>
+        <div class="stat">
+          <div class="val">{{ report.missing_count }}</div>
+          <div class="lbl">skills missing</div>
+        </div>
+        <div class="stat">
+          <div class="val">{{ report.total_jd_skills }}</div>
+          <div class="lbl">total JD skills</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skill Gap + Matched Skills -->
+  <div class="two-col">
+
+    <!-- Missing Skills -->
+    <div class="card">
+      <h2>Missing Skills
+        <span style="font-weight:400; color:#888; font-size:0.85rem;">
+          — in the JD but not your resume
+        </span>
+      </h2>
+      {% if report.missing_skills %}
+        {% for cat, skills in report.missing_skills.items() %}
+        <div class="skill-category">
+          <div class="cat-label">{{ cat }}</div>
+          <div class="skill-tags">
+            {% for skill in skills %}
+            <span class="tag tag-missing">{{ skill }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty-state">No skill gaps detected — great match!</p>
+      {% endif %}
+    </div>
+
+    <!-- Matched Skills -->
+    <div class="card">
+      <h2>Matched Skills
+        <span style="font-weight:400; color:#888; font-size:0.85rem;">
+          — already on your resume
+        </span>
+      </h2>
+      {% if report.matched_skills %}
+        {% for cat, skills in report.matched_skills.items() %}
+        <div class="skill-category">
+          <div class="cat-label">{{ cat }}</div>
+          <div class="skill-tags">
+            {% for skill in skills %}
+            <span class="tag tag-matched">{{ skill }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty-state">No direct skill matches found.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <!-- Improvement Tips -->
+  {% if report.tips %}
+  <div class="card">
+    <h2>Improvement Tips</h2>
+    {% for tip in report.tips %}
+    <div class="tip">{{ tip | replace('**', '') }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Actions -->
+  <div class="card">
+    <div class="actions">
+      <a href="/" class="btn btn-primary">← Analyze Another</a>
+      <button onclick="window.print()" class="btn btn-outline">Print Report</button>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

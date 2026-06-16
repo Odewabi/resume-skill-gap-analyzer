@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Skill Gap Analyzer{% endblock %}
+
+{% block extra_styles %}
+.hero {
+  text-align: center;
+  padding: 2.5rem 1rem 1.5rem;
+}
+.hero h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.hero p {
+  color: #555;
+  font-size: 0.95rem;
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.steps {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+.step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #222;
+}
+.form-group label span {
+  font-weight: 400;
+  color: #888;
+  font-size: 0.8rem;
+}
+textarea {
+  width: 100%;
+  height: 280px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.55;
+  color: #1a1a1a;
+  transition: border-color 0.15s;
+}
+textarea:focus {
+  outline: none;
+  border-color: #1a1a1a;
+}
+textarea::placeholder { color: #bbb; }
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.char-count {
+  font-size: 0.8rem;
+  color: #999;
+}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="hero">
+    <h1>Resume Skill Gap Analyzer</h1>
+    <p>Paste your resume and a job description to instantly see which skills
+       are missing and how well your resume matches the role.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div> Paste your resume</div>
+      <div class="step"><div class="step-num">2</div> Paste the job description</div>
+      <div class="step"><div class="step-num">3</div> Get your gap report</div>
+    </div>
+  </div>
+
+  {% if errors %}
+  <div class="error-banner">
+    {% for e in errors %}<div>⚠ {{ e }}</div>{% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <form method="POST" action="/analyze">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="resume">Your Resume <span>(plain text)</span></label>
+          <textarea id="resume" name="resume"
+            placeholder="Paste your full resume here — skills, experience, education, projects...">{{ resume or '' }}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="jd">Job Description <span>(plain text)</span></label>
+          <textarea id="jd" name="jd"
+            placeholder="Paste the full job description here — requirements, responsibilities, qualifications...">{{ jd or '' }}</textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Analyze My Resume →</button>
+        <span class="char-count" id="char-info"></span>
+      </div>
+    </form>
+  </div>
+
+  <div class="card" style="font-size:0.85rem; color:#555; line-height:1.6;">
+    <h2>Privacy Note</h2>
+    Your text is processed locally and never stored or logged.
+    For best results, paste plain text without formatting. This tool uses
+    rule-based NLP and keyword matching — it works best on clearly written,
+    skill-explicit text.
+  </div>
+</div>
+
+<script>
+  const resume = document.getElementById('resume');
+  const jd = document.getElementById('jd');
+  const info = document.getElementById('char-info');
+  function update() {
+    const rc = resume.value.trim().length;
+    const jc = jd.value.trim().length;
+    info.textContent = rc > 0 || jc > 0
+      ? `Resume: ${rc} chars · JD: ${jc} chars` : '';
+  }
+  resume.addEventListener('input', update);
+  jd.addEventListener('input', update);
+</script>
+{% endblock %}
